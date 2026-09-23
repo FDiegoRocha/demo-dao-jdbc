@@ -11,7 +11,7 @@ import model.entities.Seller;
 public class Program {
 
 	public static void main(String[] args) {
-		Department obj = new Department(1, "Books");
+		//Department obj = new Department(1, "Books");
 		
 		//Seller seller = new Seller(21, "Bob", "Bob@gmail.com", new Date(), 3000.00, obj);
 		
@@ -33,6 +33,13 @@ public class Program {
 		Seller newSeller = new Seller(null, "Greg", "Greg@gmail.com", new Date(), 4000.00, department);
 		sellerDao.insert(newSeller);
 		System.out.println("Inserted! New id = " + newSeller.getId());
+		
+		System.out.println("=== TEST 5: seller update  =====");
+		seller = sellerDao.findById(1);
+		seller.setName("Marta Wayne");
+		sellerDao.update(seller);
+		System.out.println("Update completed");
+
 
 	}
 
