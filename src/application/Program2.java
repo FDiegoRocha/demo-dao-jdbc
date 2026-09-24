@@ -19,12 +19,7 @@ public class Program2 {
 		System.out.println("=== TEST 1: Department findById =====");
 		Department department = departmentDao.findById(3);
 		System.out.println(department);
-		
-//		System.out.println("=== TEST 2: selller findByDepartment =====");
-//		Department department = new Department(2, null);
-//		List<Seller> list = sellerDao.findByDepartment(department);
-//		list.forEach(System.out::println);
-		
+				
 		System.out.println("=== TEST 3: Department findByAll =====");
 		List<Department> list2 = departmentDao.findAll();
 		list2.forEach(System.out::println);

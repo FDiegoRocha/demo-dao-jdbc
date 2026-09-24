@@ -27,12 +27,12 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 		try {
 			st = conn.prepareStatement("INSERT INTO department (Name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
 			st.setString(1, obj.getName());
-			int rows = st.executeUpdate();
+			int rows = st.executeUpdate(); // retorna a quantidade de linhas afetadas.
 			if (rows > 0) {
-				ResultSet rs = st.getGeneratedKeys();
+				ResultSet rs = st.getGeneratedKeys(); // captura a tabela de chaves retornada pelo banco
 				if (rs.next()) {
-					int id = rs.getInt(1);
-					obj.setId(id);
+					int id = rs.getInt(1); // salva o ID retornado da primeira coluna da tabela.
+					obj.setId(id); // atribui o novo ID ao objeto passado por parametro.
 				}
 				DB.closedResultSet(rs);
 			}
@@ -89,6 +89,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 				Department dep = instantiateDepartment(rs);
 				return dep;
 			}
+			return null;
 
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
@@ -96,7 +97,6 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 			DB.closedResultSet(rs);
 			DB.closedStatemnet(st);
 		}
-		return null;
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM Department");
+			st = conn.prepareStatement("SELECT * FROM Department ORDER BY Name");
 			rs = st.executeQuery();
 			List<Department> list = new ArrayList<>();
 			while (rs.next()) {
