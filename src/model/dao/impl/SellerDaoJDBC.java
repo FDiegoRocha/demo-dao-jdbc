@@ -43,7 +43,7 @@ public class SellerDaoJDBC implements SellerDao {
 				ResultSet rs = st.getGeneratedKeys();
 				if (rs.next()) {
 					int id = rs.getInt(1);
-					obj.setId(id);	
+					obj.setId(id);
 				}
 				DB.closedResultSet(rs);
 			} else {
@@ -86,9 +86,7 @@ public class SellerDaoJDBC implements SellerDao {
 	public void deleteById(Integer id) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement(
-					"DELETE FROM seller WHERE id = ?",
-					Statement.RETURN_GENERATED_KEYS);
+			st = conn.prepareStatement("DELETE FROM seller WHERE id = ?", Statement.RETURN_GENERATED_KEYS);
 			st.setInt(1, id);
 
 			st.executeUpdate();
@@ -134,7 +132,7 @@ public class SellerDaoJDBC implements SellerDao {
 		try {
 			st = conn.prepareStatement(
 					"SELECT seller.*, department.Name as DepName " + "FROM seller INNER JOIN department "
-							+ "on seller.DepartmentId = department.Id " + "ORDER BY Name");
+							+ "on seller.DepartmentId = department.Id " + "ORDER BY BaseSalary DESC");
 			rs = st.executeQuery();
 			List<Seller> list = new ArrayList<>();
 			Map<Integer, Department> map = new HashMap<>();
@@ -201,6 +199,39 @@ public class SellerDaoJDBC implements SellerDao {
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		} finally {
+			DB.closedResultSet(rs);
+			DB.closedStatemnet(st);
+		}
+	}
+
+	@Override
+	public List<Seller> findBySalaryRange(Double min, Double max) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement(
+					"SELECT seller.* , department.Name as DepName "
+					+ "FROM SELLER INNER JOIN department on seller.departmentId = department.Id "
+					+ "WHERE BaseSalary BETWEEN ? AND ?");
+			st.setDouble(1, min);
+			st.setDouble(2, max);
+			rs = st.executeQuery();
+			List<Seller> sellers = new ArrayList<>();
+			Map<Integer, Department> map = new HashMap();
+			while(rs.next()) {
+				Department dep = map.get(rs.getInt("departmentId"));
+				if(dep == null) {
+					dep = instantiateDepartment(rs);
+					map.put(rs.getInt("departmentId"), dep);
+				}
+				Seller seller = instantiateSeller(rs, dep);
+				sellers.add(seller);
+			}
+			return sellers;
+			
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
 			DB.closedResultSet(rs);
 			DB.closedStatemnet(st);
 		}
