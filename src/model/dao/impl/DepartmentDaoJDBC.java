@@ -122,6 +122,26 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
 	}
 
+	@Override
+	public void updateSalaryByDepartment(Department department, Double percentage) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("UPDATE Seller SET BaseSalary = BaseSalary * (1 + ?) WHERE DepartmentId = ?");
+			st.setDouble(1, percentage);
+			st.setInt(2, department.getId());
+			int rows = st.executeUpdate();
+			if (rows > 0) {
+				System.out.println(rows + " Rows affected!");
+			} else {
+				System.out.println("No lines affected!");
+			}
+
+		} catch (SQLException e) {
+
+		}
+
+	}
+
 	private Department instantiateDepartment(ResultSet rs) throws SQLException {
 		Department dep = new Department(rs.getInt("Id"), rs.getString("Name"));
 		return dep;

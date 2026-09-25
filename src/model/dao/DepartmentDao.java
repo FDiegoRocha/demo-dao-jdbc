@@ -10,6 +10,7 @@ public interface DepartmentDao {
 	void update(Department obj);
 	void deleteById(Integer id);
 	Department findById(Integer id);
+	void updateSalaryByDepartment(Department department, Double percentage);
 	List<Department> findAll();
 
 }

@@ -16,33 +16,38 @@ public class Program2 {
 		
 		DepartmentDao departmentDao = DaoFactory.createDepartmentDao();
 		
-		System.out.println("=== TEST 1: Department findById =====");
-		Department department = departmentDao.findById(3);
-		System.out.println(department);
+//		System.out.println("=== TEST 1: Department findById =====");
+//		Department department = departmentDao.findById(3);
+//		System.out.println(department);
 				
 		System.out.println("=== TEST 3: Department findByAll =====");
 		List<Department> list2 = departmentDao.findAll();
 		list2.forEach(System.out::println);
 		
-		System.out.println("=== TEST 4: Department insert  =====");
-		Department newDepartment = new Department(null, "Music");
-		departmentDao.insert(newDepartment);
-		System.out.println("Inserted! New id = " + newDepartment.getId());
+//		System.out.println("=== TEST 4: Department insert  =====");
+//		Department newDepartment = new Department(null, "Music");
+//		departmentDao.insert(newDepartment);
+//		System.out.println("Inserted! New id = " + newDepartment.getId());
+//		
+//		System.out.println("=== TEST 5: Department update  =====");
+//		newDepartment = departmentDao.findById(4);
+//		newDepartment.setName("Alimentação");
+//		departmentDao.update(newDepartment);
+//		System.out.println("Update completed");
+//		
+//		System.out.println("=== TEST 6: Department delete  =====");
+//		Scanner sc = new Scanner(System.in);
+//		System.out.print("Digite um id para deletar: ");
+//		int num = sc.nextInt();
+//		departmentDao.deleteById(num);
+//		System.out.println("Delete completed");
 		
-		System.out.println("=== TEST 5: Department update  =====");
-		newDepartment = departmentDao.findById(4);
-		newDepartment.setName("Alimentação");
-		departmentDao.update(newDepartment);
+		System.out.println("=== TEST 7: Department updateSalaryByDepartment  =====");
+		Department newDepartment = new Department(2, "Eletronics");
+		departmentDao.updateSalaryByDepartment(newDepartment, 0.10);
 		System.out.println("Update completed");
 		
-		System.out.println("=== TEST 6: Department delete  =====");
-		Scanner sc = new Scanner(System.in);
-		System.out.print("Digite um id para deletar: ");
-		int num = sc.nextInt();
-		departmentDao.deleteById(num);
-		System.out.println("Delete completed");
-		
-		sc.close();
+//		sc.close();
 
 
 
