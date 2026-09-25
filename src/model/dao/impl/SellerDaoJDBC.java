@@ -211,13 +211,13 @@ public class SellerDaoJDBC implements SellerDao {
 		try {
 			st = conn.prepareStatement(
 					"SELECT seller.* , department.Name as DepName "
-					+ "FROM SELLER INNER JOIN department on seller.departmentId = department.Id "
+					+ "FROM seller INNER JOIN department on seller.departmentId = department.Id "
 					+ "WHERE BaseSalary BETWEEN ? AND ?");
 			st.setDouble(1, min);
 			st.setDouble(2, max);
 			rs = st.executeQuery();
 			List<Seller> sellers = new ArrayList<>();
-			Map<Integer, Department> map = new HashMap();
+			Map<Integer, Department> map = new HashMap<>();
 			while(rs.next()) {
 				Department dep = map.get(rs.getInt("departmentId"));
 				if(dep == null) {
@@ -230,6 +230,39 @@ public class SellerDaoJDBC implements SellerDao {
 			return sellers;
 			
 		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			DB.closedResultSet(rs);
+			DB.closedStatemnet(st);
+		}
+	}
+
+	@Override
+	public List<Seller> findByPartialName(String text) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("SELECT seller.*, department.Name as DepName "
+						+ "FROM seller INNER JOIN department on seller.DepartmentId = department.Id "
+						+ "WHERE seller.Name LIKE ?"					
+					);
+			st.setString(1, "%" + text + "%");
+			rs = st.executeQuery();
+			List<Seller> sellers = new ArrayList<>();
+			Map<Integer, Department> map = new HashMap<>();
+			while(rs.next()) {
+				Department dep = map.get(rs.getInt("DepartmentId"));
+				if(dep == null) {
+					dep = instantiateDepartment(rs);
+					map.put(rs.getInt("DepartmentId"), dep);
+				}
+				Seller seller = instantiateSeller(rs, dep);
+				sellers.add(seller);
+			}
+			return sellers;
+			
+			
+		}catch(SQLException e) {
 			throw new DbException(e.getMessage());
 		}finally {
 			DB.closedResultSet(rs);

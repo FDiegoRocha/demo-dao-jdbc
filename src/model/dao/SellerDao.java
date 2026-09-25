@@ -10,8 +10,10 @@ public interface SellerDao {
 	void update(Seller obj);
 	void deleteById(Integer id);
 	Seller findById(Integer id);
+	List<Seller> findByPartialName(String text);
 	List<Seller> findAll();
 	List<Seller> findByDepartment(Department department);
 	List<Seller> findBySalaryRange(Double min, Double max);
+	
 
 }
