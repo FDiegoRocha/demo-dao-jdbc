@@ -29,7 +29,9 @@ public class Program3 {
 		List<Project> list = projectDao.findAll();
 		list.forEach(System.out::println);
 		
-		
+		System.out.println("=== TEST 5: Project delete =====");
+		projectDao.deleteById(3);
+		System.out.println("complete delete!");
 	}
 
 }
