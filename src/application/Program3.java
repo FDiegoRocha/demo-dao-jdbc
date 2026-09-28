@@ -1,5 +1,7 @@
 package application;
 
+import java.util.List;
+
 import model.dao.DaoFactory;
 import model.dao.ProjectDao;
 import model.entities.Project;
@@ -22,6 +24,10 @@ public class Program3 {
 		System.out.println("=== TEST 3: Project findById =====");
 		Project proj3 = projectDao.findById(2);
 		System.out.println(proj3);
+		
+		System.out.println("=== TEST 4: Project findAll =====");
+		List<Project> list = projectDao.findAll();
+		list.forEach(System.out::println);
 		
 		
 	}

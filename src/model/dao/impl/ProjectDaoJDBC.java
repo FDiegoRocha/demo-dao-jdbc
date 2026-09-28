@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import db.DB;
@@ -13,9 +14,9 @@ import model.dao.ProjectDao;
 import model.entities.Project;
 
 public class ProjectDaoJDBC implements ProjectDao {
-	
+
 	private Connection conn;
-	
+
 	public ProjectDaoJDBC(Connection conn) {
 		this.conn = conn;
 	}
@@ -25,28 +26,29 @@ public class ProjectDaoJDBC implements ProjectDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("INSERT INTO Project (Name, Budget) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+			st = conn.prepareStatement("INSERT INTO Project (Name, Budget) VALUES (?, ?)",
+					Statement.RETURN_GENERATED_KEYS);
 			st.setString(1, proj.getName());
 			st.setDouble(2, proj.getBudget());
-			
+
 			int rows = st.executeUpdate();
-			if(rows > 0) {
+			if (rows > 0) {
 				rs = st.getGeneratedKeys();
-				if(rs.next()) {
+				if (rs.next()) {
 					int id = rs.getInt(1);
 					proj.setId(id);
 				}
-			}else {	
+			} else {
 				throw new DbException("Unexpected error! No rows affected!");
 			}
-					
-		}catch(SQLException e) {
+
+		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
-		}finally {
+		} finally {
 			DB.closedResultSet(rs);
 			DB.closedStatemnet(st);
 		}
-		
+
 	}
 
 	@Override
@@ -58,13 +60,13 @@ public class ProjectDaoJDBC implements ProjectDao {
 			st.setDouble(2, proj.getBudget());
 			st.setInt(3, proj.getId());
 			st.executeUpdate();
-			
-		}catch(SQLException e) {
+
+		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
-		}finally {
+		} finally {
 			DB.closedStatemnet(st);
 		}
-		
+
 	}
 
 	@Override
@@ -74,14 +76,37 @@ public class ProjectDaoJDBC implements ProjectDao {
 		try {
 			st = conn.prepareStatement("SELECT * FROM project WHERE id = ?");
 			st.setInt(1, id);
-		 rs = st.executeQuery();
-		 if(rs.next()) {
-			 Project proj = new Project(rs.getInt("id"), rs.getString("name"), rs.getDouble("budget"));
-			 return proj;
-		 }
+			rs = st.executeQuery();
+			if (rs.next()) {
+				Project proj = new Project(rs.getInt("id"), rs.getString("name"), rs.getDouble("budget"));
+				return proj;
+			}
 			return null;
-			
-		}catch(SQLException e) {
+
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closedResultSet(rs);
+			DB.closedStatemnet(st);
+		}
+	}
+
+	@Override
+	public List<Project> findAll() {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		List<Project> projs = new ArrayList<>();
+		try {
+			st = conn.prepareStatement("SELECT * FROM project");
+			rs = st.executeQuery();
+			while (rs.next()) {
+				Project proj = new Project(rs.getInt("id"), rs.getString("name"), rs.getDouble("budget"));
+				projs.add(proj);
+
+			}
+			return projs;
+
+		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		}finally {
 			DB.closedResultSet(rs);
@@ -90,15 +115,9 @@ public class ProjectDaoJDBC implements ProjectDao {
 	}
 
 	@Override
-	public List<Project> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void deleteById(Integer id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
