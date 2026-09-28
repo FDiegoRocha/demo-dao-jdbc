@@ -78,7 +78,7 @@ public class ProjectDaoJDBC implements ProjectDao {
 			st.setInt(1, id);
 			rs = st.executeQuery();
 			if (rs.next()) {
-				Project proj = new Project(rs.getInt("id"), rs.getString("name"), rs.getDouble("budget"));
+				Project proj = instantiateProject(rs);
 				return proj;
 			}
 			return null;
@@ -100,7 +100,7 @@ public class ProjectDaoJDBC implements ProjectDao {
 			st = conn.prepareStatement("SELECT * FROM project");
 			rs = st.executeQuery();
 			while (rs.next()) {
-				Project proj = new Project(rs.getInt("id"), rs.getString("name"), rs.getDouble("budget"));
+				Project proj = instantiateProject(rs);
 				projs.add(proj);
 
 			}
@@ -128,6 +128,11 @@ public class ProjectDaoJDBC implements ProjectDao {
 			DB.closedStatemnet(st);
 		}
 
+	}
+	private Project instantiateProject(ResultSet rs) throws SQLException {
+		Project proj = new Project(rs.getInt("id"), rs.getString("name"), rs.getDouble("budget"));
+				
+		return proj;
 	}
 
 }
