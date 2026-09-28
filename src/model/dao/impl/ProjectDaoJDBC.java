@@ -69,8 +69,24 @@ public class ProjectDaoJDBC implements ProjectDao {
 
 	@Override
 	public Project findById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("SELECT * FROM project WHERE id = ?");
+			st.setInt(1, id);
+		 rs = st.executeQuery();
+		 if(rs.next()) {
+			 Project proj = new Project(rs.getInt("id"), rs.getString("name"), rs.getDouble("budget"));
+			 return proj;
+		 }
+			return null;
+			
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			DB.closedResultSet(rs);
+			DB.closedStatemnet(st);
+		}
 	}
 
 	@Override

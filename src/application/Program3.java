@@ -14,11 +14,16 @@ public class Program3 {
 //		projectDao.insert(proj);
 //		System.out.println("Inserted! New id = " + proj.getId());
 		
-		System.out.println("=== TEST 3: Project update =====");
-		Project proj2 = new Project(4,"Equipamentos Tecnologicos", 170000.00);
-		projectDao.update(proj2);
-		System.out.println("complete update!");
-
+//		System.out.println("=== TEST 2: Project update =====");
+//		Project proj2 = new Project(4,"Equipamentos Tecnologicos", 170000.00);
+//		projectDao.update(proj2);
+//		System.out.println("complete update!");
+		
+		System.out.println("=== TEST 3: Project findById =====");
+		Project proj3 = projectDao.findById(2);
+		System.out.println(proj3);
+		
+		
 	}
 
 }
