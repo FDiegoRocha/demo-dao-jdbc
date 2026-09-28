@@ -36,7 +36,7 @@ public class ProjectDaoJDBC implements ProjectDao {
 					int id = rs.getInt(1);
 					proj.setId(id);
 				}
-			}else {
+			}else {	
 				throw new DbException("Unexpected error! No rows affected!");
 			}
 					
@@ -50,13 +50,25 @@ public class ProjectDaoJDBC implements ProjectDao {
 	}
 
 	@Override
-	public void update(Integer id) {
-		// TODO Auto-generated method stub
+	public void update(Project proj) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("UPDATE project SET name = ?, budget = ? WHERE id = ?");
+			st.setString(1, proj.getName());
+			st.setDouble(2, proj.getBudget());
+			st.setInt(3, proj.getId());
+			st.executeUpdate();
+			
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			DB.closedStatemnet(st);
+		}
 		
 	}
 
 	@Override
-	public Project findById() {
+	public Project findById(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

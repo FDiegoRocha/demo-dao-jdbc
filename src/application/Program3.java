@@ -9,10 +9,15 @@ public class Program3 {
 	public static void main(String[] args) {
 		ProjectDao projectDao = DaoFactory.createProject();
 		
-		System.out.println("=== TEST 1: Project insert =====");
-		Project proj = new Project(null,"Equipamentos Tecnologicos", 150000.00);
-		projectDao.insert(proj);
-		System.out.println("Inserted! New id = " + proj.getId());
+//		System.out.println("=== TEST 1: Project insert =====");
+//		Project proj = new Project(null,"Equipamentos Tecnologicos", 150000.00);
+//		projectDao.insert(proj);
+//		System.out.println("Inserted! New id = " + proj.getId());
+		
+		System.out.println("=== TEST 3: Project update =====");
+		Project proj2 = new Project(4,"Equipamentos Tecnologicos", 170000.00);
+		projectDao.update(proj2);
+		System.out.println("complete update!");
 
 	}
 

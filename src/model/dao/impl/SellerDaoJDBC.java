@@ -43,7 +43,7 @@ public class SellerDaoJDBC implements SellerDao {
 			if (rowsAffected > 0) {
 				rs = st.getGeneratedKeys();
 				if (rs.next()) {
-					int id = rs.getInt(1)	;
+					int id = rs.getInt(1);
 					obj.setId(id);
 				}
 			} else {
